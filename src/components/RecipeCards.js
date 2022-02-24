@@ -1,18 +1,22 @@
 import React from "react";
+import CardStyles from "./CardStyles.css";
 // import "bootstrap/dist/css/bootstrap.min.css";
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />;
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma" />;
 
-function RecipeCards({ image, link, id, summary, title }) {
+function RecipeCards({ image, source, id, summary, title, imageUrl }) {
   return (
     <div className="card-container">
       <div className="w3-card-4" key={id}>
-        <img src={image} alt={image.alt} />
+        <header>{title}</header>
+        <img src={image} alt={imageUrl} />
         <div className="w3-container w3-center">
-          <h3>{title}</h3>
           <p>{summary}</p>
         </div>
-        <button href={link}>Go to recipe!</button>
-        <button>Add to Favs</button>
+        <button className="w3-button w3-blue" href={source}>
+          Go to recipe!
+        </button>
+        <button className="w3-button w3-green">Add to Favs</button>
       </div>
     </div>
   );

@@ -18,18 +18,16 @@ export default function App() {
   }, [query]);
 
   const getRecipeData = async () => {
-    const response = await fetch(
-      `https://api.spoonacular.com/recipes/complexSearch?query=${query}&apiKey=${APIKey}`
-    );
+    const response = await fetch();
+    // `https://api.spoonacular.com/recipes/complexSearch?query=${query}&apiKey=${APIKey}`
     const data = await response.json();
     setRecipeData(data.results);
     console.log(data.results);
   };
 
   const getRecipeSum = async () => {
-    const response = await fetch(
-      `https://api.spoonacular.com/recipes/${id}/summary&apiKey=${APIKey}`
-    );
+    const response = await fetch();
+    //  `https://api.spoonacular.com/recipes/${id}/summary&apiKey=${APIKey}`
     const data = await response.json();
     setRecipeSum(data.summary);
     setId(data.id);
@@ -49,7 +47,7 @@ export default function App() {
   return (
     <div className="App">
       <h1>Got Munchies?</h1>
-      <div>
+      <div className="search-form">
         <form onSubmit={getSearch} className="search-form">
           <input
             className="search-form"
@@ -68,12 +66,16 @@ export default function App() {
         </form>
         <div>
           {recipeData.map((recipe) => (
-            <RecipeCards image={recipe.image} button={recipe.link} />
+            <RecipeCards
+              image={recipe.image}
+              alt={recipe.imageUrl}
+              button={recipe.source}
+            />
           ))}
           {recipeSum.map((recipe) => (
             <RecipeCards
-              id={recipe.id.summary}
               title={recipe.title}
+              id={recipe.id.summary}
               key={recipe.id}
             />
           ))}
