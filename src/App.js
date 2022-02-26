@@ -1,51 +1,40 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
-import test from "./components/test";
+import RecipeCards from "./components/RecipeCards";
+import axios from "axios";
 
 export default function App() {
   const APIKey = process.env.REACT_APP_SPOONACULAR_KEY;
+  const complexSearch = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKey}`;
 
   const [search, setSearch] = useState("");
   const [recipeData, setRecipeData] = useState([]);
   const [recipeSum, setRecipeSum] = useState([]);
   const [query, setQuery] = useState([]);
+  const [id, setId] = useState([]);
 
-  // const [id, setId] = useState([]);
+  const getAll = useEffect(() => {
+    const getRecipeData = async () => {
+      const res = await axios.get(`${complexSearch}`);
+      setRecipeData(res.data.results);
 
-  useEffect(() => {
-    async function getRecipeData () {
-      const response = await fetch(
-        `https://api.spoonacular.com/recipes/complexSearch?query=${query}&apiKey=${APIKey}`
-      );
-      const data = await response.json();
-      setRecipeData(data.results);
-      console.log(data.results);
       let recipeSum = [];
-      for (let i = 0; i < response.data.results.length; i++) {
+      for (let i = 0; i < res.data.results.length; i++) {
         async function getRecipeSum() {
-          const res = await fetch(
-            `https://api.spoonacular.com/recipes/${response.data.results[i].id}/summary&apiKey=${APIKey}`
+          const response = await axios.get(
+            `https://api.spoonacular.com/recipes/${res.data.results[i].id}/information?apiKey=${APIKey}&includeNutrition=false`
           );
-          recipeSum.push(res.data);
+          recipeSum.push(response.data);
           setRecipeSum(recipeSum);
         }
         getRecipeSum();
       }
-    };
-  getRecipeData()
+    }
+
+    getRecipeData();
   }, [query]);
 
   
-  // const getRecipeSum = async () => {
-  //   const response = await fetch(
-  //     `https://api.spoonacular.com/recipes/${id}/summary&apiKey=${APIKey}`
-  //   );
-  //   const data = await response.json();
-  //   setRecipeSum(id.summary);
-  //   setId(id.summary);
-  //   console.log(id.summary);
-  // };
-
   const searchResults = (e) => {
     setSearch(e.target.value);
   };
@@ -68,19 +57,21 @@ export default function App() {
             value={search}
             onChange={searchResults}
           />
-          <button
-            type="submit"
-            className="recipe"
-            onClick={getRecipeData}
-          >
+          <button type="submit" className="recipe" onClick={getAll}>
             Munch Away
           </button>
         </form>
         <div className="recipe_cards">
-          <test
-          recipeData={recipeData}
-          recipeSum={recipeSum}
-          />
+          {recipeData.map((recipe) => (
+            <RecipeCards
+              key={recipe.id}
+              title={recipe.title}
+              image={recipe.image}
+              text={recipe.id.summary}
+              alt={recipe.imageUrl}
+              button={recipe.sourceUrl}
+            />
+          ))}
         </div>
       </div>
     </div>
