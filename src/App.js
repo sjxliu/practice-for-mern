@@ -1,7 +1,6 @@
-// Lost file
 import "./index.css";
 import React, { useState, useEffect } from "react";
-import RecipeCards from "./components/RecipeCards";
+import test from "./components/test";
 
 export default function App() {
   const APIKey = process.env.REACT_APP_SPOONACULAR_KEY;
@@ -10,29 +9,42 @@ export default function App() {
   const [recipeData, setRecipeData] = useState([]);
   const [recipeSum, setRecipeSum] = useState([]);
   const [query, setQuery] = useState([]);
-  const [id, setId] = useState([]);
+
+  // const [id, setId] = useState([]);
 
   useEffect(() => {
-    getRecipeData();
-    getRecipeSum();
+    async function getRecipeData () {
+      const response = await fetch(
+        `https://api.spoonacular.com/recipes/complexSearch?query=${query}&apiKey=${APIKey}`
+      );
+      const data = await response.json();
+      setRecipeData(data.results);
+      console.log(data.results);
+      let recipeSum = [];
+      for (let i = 0; i < response.data.results.length; i++) {
+        async function getRecipeSum() {
+          const res = await fetch(
+            `https://api.spoonacular.com/recipes/${response.data.results[i].id}/summary&apiKey=${APIKey}`
+          );
+          recipeSum.push(res.data);
+          setRecipeSum(recipeSum);
+        }
+        getRecipeSum();
+      }
+    };
+  getRecipeData()
   }, [query]);
 
-  const getRecipeData = async () => {
-    const response = await fetch(
-    `https://api.spoonacular.com/recipes/complexSearch?query=${query}&apiKey=${APIKey}`);
-    const data = await response.json();
-    setRecipeData(data.results);
-    console.log(data.results);
-  };
-
-  const getRecipeSum = async () => {
-    const response = await fetch(
-     `https://api.spoonacular.com/recipes/${id}/summary&apiKey=${APIKey}`);
-    const data = await response.json();
-    setRecipeSum(id.summary);
-    setId(id.summary);
-    console.log(id.summary);
-  };
+  
+  // const getRecipeSum = async () => {
+  //   const response = await fetch(
+  //     `https://api.spoonacular.com/recipes/${id}/summary&apiKey=${APIKey}`
+  //   );
+  //   const data = await response.json();
+  //   setRecipeSum(id.summary);
+  //   setId(id.summary);
+  //   console.log(id.summary);
+  // };
 
   const searchResults = (e) => {
     setSearch(e.target.value);
@@ -59,27 +71,16 @@ export default function App() {
           <button
             type="submit"
             className="recipe"
-            onClick={(getRecipeData, getRecipeSum)}
+            onClick={getRecipeData}
           >
             Munch Away
           </button>
         </form>
         <div className="recipe_cards">
-          {recipeData.map((recipe) => (
-            <RecipeCards
-            title={recipe.title}
-              image={recipe.image}
-              alt={recipe.imageUrl}
-              button={recipe.source}
-            />
-          ))}
-          {recipeSum.map((recipe) => (
-            <RecipeCards
-              
-              id={recipe.id.summary}
-              key={recipe.id}
-            />
-          ))}
+          <test
+          recipeData={recipeData}
+          recipeSum={recipeSum}
+          />
         </div>
       </div>
     </div>
