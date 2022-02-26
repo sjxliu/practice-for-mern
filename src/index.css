@@ -35,14 +35,14 @@ form.search-form {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #50dcff;
+  background-color: #50ffad;
   border-radius: 0.5rem;
   margin-bottom: 5rem;
   box-shadow: 1rem 2rem 5rem rgb(15, 202, 146);
   position: relative; 
 }
 input.search-form::placeholder{
-  color: rgb(9, 75, 255);
+  color: #16da98;
 }
 input.search-form {
   font-size: 3rem;
@@ -54,7 +54,7 @@ input.search-form {
   padding-top: 2px;
   text-transform: uppercase;
   /* background-color: rgb(255, 167, 3); */
-  color: rgb(9, 75, 255);
+  color: #11996c;
 }
 
 /* .search-form input[type="text"] {
@@ -111,7 +111,11 @@ button.recipe {
 }
 
 button.recipe:hover {
-  background-color: #ffc400;
-  color: rgb(9, 75, 255);
+  background-color: #05681d;
+  color: rgb(0, 94, 245);
   transition: all 0.3s;
+}
+
+.recipe_cards{
+  display: inline;
 }

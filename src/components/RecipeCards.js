@@ -6,9 +6,9 @@ import CardStyles from "./CardStyles.css";
 
 function RecipeCards({ image, source, id, summary, title, imageUrl }) {
   return (
-    <div className="card-container">
-      <div className="w3-card-4" key={id}>
-        <header>{title}</header>
+    <div className="card-container" style={CardStyles}>
+      <div className="w3-card-4" key={id} style={CardStyles}>
+        <header  style={CardStyles}>{title}</header>
         <img src={image} alt={imageUrl} />
         <div className="w3-container w3-center">
           <p>{summary}</p>
